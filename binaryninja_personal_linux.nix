@@ -2,8 +2,8 @@
 stdenv.mkDerivation rec {
   name = "binary-ninja";
   buildInputs = [ autoPatchelfHook makeWrapper unzip wayland libGL qt6.full qt6.qtbase python310 stdenv.cc.cc.lib glib fontconfig dbus ];
-  src = ./binaryninja_personal_linux.zip;
-  nativeBuildInputs = [ wrapQtAppsHook python310.pkgs.wrapPython ]; 
+  src = ./BinaryNinja-personal.zip;
+  nativeBuildInputs = [ wrapQtAppsHook python310.pkgs.wrapPython ];
 
   dontWrapQtApps = true;
   buildPhase = ":";
