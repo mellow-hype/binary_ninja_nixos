@@ -1,8 +1,25 @@
-{ stdenv, autoPatchelfHook, makeWrapper, unzip, libGL, wayland, qt6, wrapQtAppsHook, python310, glib, fontconfig, dbus }:
+{ pkgs, stdenv, autoPatchelfHook, makeWrapper, unzip, libGL, wayland, qt6, wrapQtAppsHook, python310, glib, fontconfig, dbus }:
 stdenv.mkDerivation rec {
   name = "binary-ninja";
-  buildInputs = [ autoPatchelfHook makeWrapper unzip wayland libGL qt6.full qt6.qtbase python310 stdenv.cc.cc.lib glib fontconfig dbus ];
-  src = ./BinaryNinja-personal.zip;
+  buildInputs = [
+    autoPatchelfHook makeWrapper
+    unzip
+    wayland
+    libGL
+    # NOTE: libxml2_13 pkg seems to be a temporary workaround after libxml 2.14 added breaking ABI
+    # changes (see: https://github.com/NixOS/nixpkgs/issues/434341). This will need to be updated
+    # at some point.
+    pkgs.libxml2_13
+    qt6.qtbase
+    qt6.qttools
+    qt6.qtshadertools
+    qt6.qtscxml
+    python310
+    stdenv.cc.cc.lib
+    glib
+    fontconfig dbus
+  ];
+  src = ./binaryninja_personal_linux.zip;
   nativeBuildInputs = [ wrapQtAppsHook python310.pkgs.wrapPython ];
 
   dontWrapQtApps = true;
