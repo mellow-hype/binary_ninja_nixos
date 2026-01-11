@@ -1,4 +1,16 @@
 { pkgs, stdenv, autoPatchelfHook, makeWrapper, unzip, libGL, wayland, qt6, wrapQtAppsHook, python310, glib, fontconfig, dbus }:
+
+let
+    desktopItem = pkgs.makeDesktopItem {
+        name = "binaryninja";
+        desktopName = "Binary Ninja";
+        exec = "binaryninja";
+        categories = [ "Utility" ];
+        terminal = false;
+        comment = "Binary Ninja: A Reverse Engineering Platform";
+    };
+in
+
 stdenv.mkDerivation rec {
   name = "binary-ninja";
   buildInputs = [
@@ -25,6 +37,10 @@ stdenv.mkDerivation rec {
   dontWrapQtApps = true;
   buildPhase = ":";
   installPhase = ''
+    # install .desktop file
+    mkdir -p $out/share/applications
+    cp ${desktopItem}/share/applications/* $out/share/applications/
+
     mkdir -p $out/bin
     mkdir -p $out/opt
     cp -r * $out/opt
